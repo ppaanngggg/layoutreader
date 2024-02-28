@@ -1,5 +1,11 @@
 # LayoutReader
 
+**TODO:**
+1. upload models to huggingface
+2. explain why this repo
+3. explain the new dataset
+4. build docker image
+
 ## Helper
 
 ### Build Dataset
