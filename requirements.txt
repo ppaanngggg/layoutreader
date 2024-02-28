@@ -1,0 +1,6 @@
+transformers
+nltk
+loguru
+typer
+rich
+tqdm
