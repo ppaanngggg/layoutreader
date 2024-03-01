@@ -7,7 +7,6 @@ DIR="$( cd "$( dirname "$0" )" && cd .. && pwd )"
 OUTPUT_DIR="${DIR}/checkpoint/v3/$(date +%F-%H)"
 DATA_DIR="${DIR}/ReadingBank/"
 
-export CLEARML_TASK="layoutreader/$(date +%F-%H)"
 mkdir -p "${OUTPUT_DIR}"
 
 deepspeed train.py \
@@ -29,5 +28,4 @@ deepspeed train.py \
   --remove_unused_columns False \
   --output_dir "${OUTPUT_DIR}" \
   --overwrite_output_dir \
-  --report_to clearml \
   "$@"

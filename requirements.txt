@@ -1,6 +1,8 @@
 transformers
+deepspeed
 nltk
 loguru
 typer
 rich
 tqdm
+opencv-python
