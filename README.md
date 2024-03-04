@@ -25,10 +25,21 @@ The original [LayoutReader](https://github.com/microsoft/unilm/tree/master/layou
 
 ```python
 from transformers import LayoutLMv3ForTokenClassification
+from v3.helpers import prepare_inputs, boxes2inputs, parse_logits
 
 model = LayoutLMv3ForTokenClassification.from_pretrained("hantian/layoutreader")
-# TODO
+
+boxes = [[...], ...]  # list of [left, top, right, bottom], bboxes of spans
+inputs = boxes2inputs(boxes)
+inputs = prepare_inputs(inputs, model)
+logits = model(**inputs).logits.cpu().squeeze(0)
+orders = parse_logits(logits, len(boxes))
+print(orders)
+
+# [0, 1, 2, ...]
 ```
+
+Or you can `python main.py` to serve the model.
 
 ## Dataset
 
