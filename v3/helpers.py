@@ -1,4 +1,4 @@
-from collections import OrderedDict, defaultdict
+from collections import defaultdict
 from typing import List, Dict
 
 import torch
@@ -63,6 +63,17 @@ class DataCollator:
         return ret
 
 
+def boxes2inputs(boxes: List[List[int]]) -> Dict[str, torch.Tensor]:
+    bbox = [[0, 0, 0, 0]] + boxes + [[0, 0, 0, 0]]
+    input_ids = [CLS_TOKEN_ID] + [UNK_TOKEN_ID] * len(boxes) + [EOS_TOKEN_ID]
+    attention_mask = [1] + [1] * len(boxes) + [1]
+    return {
+        "bbox": torch.tensor([bbox]),
+        "attention_mask": torch.tensor([attention_mask]),
+        "input_ids": torch.tensor([input_ids]),
+    }
+
+
 def prepare_inputs(
     inputs: Dict[str, torch.Tensor], model: LayoutLMv3ForTokenClassification
 ) -> Dict[str, torch.Tensor]:
@@ -76,25 +87,6 @@ def prepare_inputs(
 
 
 def parse_logits(logits: torch.Tensor, length: int) -> List[int]:
-    """
-    parse logits to orders
-
-    :param logits: logits from model
-    :param length: input length
-    :return: orders
-    """
-    logits = logits[1 : length + 1, :length]
-    orders = logits.argsort(descending=True).tolist()
-    ret = OrderedDict()
-    for order in orders:
-        for idx in order:
-            if idx not in ret:
-                ret[idx] = None
-                break
-    return list(ret.keys())
-
-
-def parse_logits_v2(logits: torch.Tensor, length: int) -> List[int]:
     """
     parse logits to orders
 

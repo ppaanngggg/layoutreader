@@ -9,7 +9,7 @@ from loguru import logger
 from pydantic import BaseModel, Field
 from transformers import LayoutLMv3ForTokenClassification
 
-from v3.helpers import DataCollator, MAX_LEN, parse_logits_v2, prepare_inputs
+from v3.helpers import MAX_LEN, parse_logits, prepare_inputs, boxes2inputs
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = (
@@ -20,7 +20,6 @@ model = (
     .to(device)
     .eval()
 )
-data_collator = DataCollator()
 app = FastAPI()
 
 
@@ -49,17 +48,10 @@ class PredictResponse(BaseModel):
 
 
 def do_predict(boxes: List[List[int]]) -> List[int]:
-    inputs = data_collator(
-        [
-            {
-                "source_boxes": boxes,
-                "target_index": [0] * len(boxes),
-            }
-        ]
-    )
+    inputs = boxes2inputs(boxes)
     inputs = prepare_inputs(inputs, model)
     logits = model(**inputs).logits.cpu().squeeze(0)
-    return parse_logits_v2(logits, len(boxes))
+    return parse_logits(logits, len(boxes))
 
 
 @app.post("/predict")

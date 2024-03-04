@@ -11,7 +11,7 @@ from helpers import (
     DataCollator,
     check_duplicate,
     MAX_LEN,
-    parse_logits_v2,
+    parse_logits,
     prepare_inputs,
 )
 
@@ -57,7 +57,7 @@ def main(
         logits = model_outputs.logits.cpu()
         for data, logit in zip(batch, logits):
             target_index = data["target_index"][:MAX_LEN]
-            pred_index = parse_logits_v2(logit, len(target_index))
+            pred_index = parse_logits(logit, len(target_index))
             assert len(pred_index) == len(target_index)
             assert not check_duplicate(pred_index)
             target_texts = data["target_texts"][:MAX_LEN]
