@@ -24,10 +24,6 @@ class Arguments(TrainingArguments):
         default=None,
         metadata={"help": "Path to dataset"},
     )
-    skip_input_ids: bool = field(
-        default=False,
-        metadata={"help": "Whether to skip input ids"},
-    )
 
 
 def load_train_and_dev_dataset(path: str) -> (Dataset, Dataset):
@@ -56,7 +52,7 @@ def main():
     model = LayoutLMv3ForTokenClassification.from_pretrained(
         args.model_dir, num_labels=MAX_LEN, visual_embed=False
     )
-    data_collator = DataCollator(args.skip_input_ids, model.config.hidden_size)
+    data_collator = DataCollator()
     trainer = Trainer(
         model=model,
         args=args,

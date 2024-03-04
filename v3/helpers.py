@@ -11,10 +11,6 @@ EOS_TOKEN_ID = 2
 
 
 class DataCollator:
-    def __init__(self, skip_input_ids: bool, hidden_size: int):
-        self.skip_input_ids = skip_input_ids
-        self.hidden_size = hidden_size
-
     def __call__(self, features: List[dict]) -> Dict[str, torch.Tensor]:
         bbox = []
         labels = []
@@ -58,13 +54,8 @@ class DataCollator:
             "bbox": torch.tensor(bbox),
             "attention_mask": torch.tensor(attention_mask),
             "labels": torch.tensor(labels),
+            "input_ids": torch.tensor(input_ids),
         }
-        if self.skip_input_ids:
-            ret["inputs_embeds"] = torch.zeros(
-                (len(features), max_len, self.hidden_size)
-            )
-        else:
-            ret["input_ids"] = torch.tensor(input_ids)
         # set label > MAX_LEN to -100, because original labels may be > MAX_LEN
         ret["labels"][ret["labels"] > MAX_LEN] = -100
         # set label > 0 to label-1, because original labels are 1-indexed

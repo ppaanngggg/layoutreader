@@ -2,11 +2,9 @@ import glob
 import gzip
 import json
 import os
-import pickle
 import random
 import re
 
-import numpy as np
 import tqdm
 import typer
 from loguru import logger
@@ -14,48 +12,8 @@ from loguru import logger
 app = typer.Typer()
 
 
-def draw_one(ids: list[list], texts: list[str]):
-    import cv2
-
-    img = np.empty((1000, 1000, 3), dtype="uint8")
-    img.fill(255)
-    for i, (_, left, top, right, bottom) in enumerate(ids):
-        cv2.rectangle(img, (left, top), (right, bottom), (0, 255, 0), 1)
-        cv2.putText(
-            img,
-            str(i),
-            (left, top - 1),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.3,
-            (0, 0, 255),
-            1,
-        )
-        cv2.putText(
-            img,
-            texts[i],
-            (left, bottom - 3),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.4,
-            (255, 0, 0),
-            1,
-        )
-    cv2.imshow("img", img)
-    return cv2.waitKey(0)
-
-
-@app.command()
-def draw(input_file: str):
-    with open(input_file, "rb") as f:
-        datas = pickle.load(f)
-
-    for data in datas:
-        if draw_one(data["target_ids"], data["target_texts"]) == ord("q"):
-            break
-
-
-def read_raws(path: str) -> list:
+def read_raws(path: str):
     logger.info("Creating features from dataset at {}", path)
-    examples = []
     if os.path.isdir(path):
         text_files = glob.glob(f"{path}/*text*.json")
         layout_files = [re.sub("text|txt", "layout", x, 1) for x in text_files]
@@ -68,24 +26,26 @@ def read_raws(path: str) -> list:
             for i, (text_line, layout_line) in enumerate(
                 zip(text_reader, layout_reader)
             ):
-                if (i + 1) % 10000 == 0:
-                    logger.info(f"{i + 1} lines ...")
-                examples.append((json.loads(text_line), json.loads(layout_line)))
-    return examples
+                yield json.loads(text_line), json.loads(layout_line)
 
 
 @app.command()
-def cache_dataset_spans(
-    path: str,
-    output_file: str,
-    shuffle: bool = True,
-    src_shuffle_rate: float = 0.5,
+def create_dataset_spans(
+    path: str = typer.Argument(
+        ...,
+        help="Path to the dataset, like `./train/`",
+    ),
+    output_file: str = typer.Argument(
+        ..., help="Path to the output file, like `./train.jsonl.gz`"
+    ),
+    src_shuffle_rate: float = typer.Option(
+        0.5, help="The rate to shuffle input's order"
+    ),
 ):
     random.seed(42)
-    examples = read_raws(path)
-
-    features = []
-    for text, layout in tqdm.tqdm(examples):
+    logger.info("Saving features into file {}", output_file)
+    f_out = gzip.open(output_file, "wt")
+    for text, layout in tqdm.tqdm(read_raws(path)):
         target_boxes = []
         target_texts = []
         last_box = [0, 0, 0, 0]
@@ -136,26 +96,20 @@ def cache_dataset_spans(
             target_index[i] = j
             j += 1
 
-        # if draw_one(source_boxes, source_texts) == ord("q"):
-        #     return
-        features.append(
-            {
-                "source_boxes": source_boxes,
-                "source_texts": source_texts,
-                "target_boxes": target_boxes,
-                "target_texts": target_texts,
-                "target_index": target_index,
-                "bleu": text["bleu"],
-            }
+        f_out.write(
+            json.dumps(
+                {
+                    "source_boxes": source_boxes,
+                    "source_texts": source_texts,
+                    "target_boxes": target_boxes,
+                    "target_texts": target_texts,
+                    "target_index": target_index,
+                    "bleu": text["bleu"],
+                }
+            )
+            + "\n"
         )
-
-    if shuffle:
-        random.shuffle(features)
-
-    logger.info("Saving features into cached file {}", output_file)
-    with gzip.open(output_file, "wt") as f:
-        for feature in tqdm.tqdm(features):
-            f.write(json.dumps(feature) + "\n")
+    f_out.close()
 
 
 if __name__ == "__main__":

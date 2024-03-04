@@ -13,12 +13,14 @@ from v3.helpers import DataCollator, MAX_LEN, parse_logits_v2, prepare_inputs
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = (
-    LayoutLMv3ForTokenClassification.from_pretrained(os.getenv("LOAD_PATH", "./model"))
+    LayoutLMv3ForTokenClassification.from_pretrained(
+        os.getenv("LOAD_PATH", "hantian/layoutreader")
+    )
     .bfloat16()
     .to(device)
     .eval()
 )
-data_collator = DataCollator(skip_input_ids=False, hidden_size=model.config.hidden_size)
+data_collator = DataCollator()
 app = FastAPI()
 
 
@@ -30,9 +32,6 @@ def get_config():
 
 
 class PredictRequest(BaseModel):
-    spans: List[str] = Field(
-        ..., examples=[["Hello", "World"]], description="Spans of text"
-    )
     boxes: List[List[float]] = Field(
         ...,
         examples=[[[2, 2, 3, 3], [1, 1, 2, 2]]],
@@ -65,10 +64,6 @@ def do_predict(boxes: List[List[int]]) -> List[int]:
 
 @app.post("/predict")
 def predict(request: PredictRequest) -> PredictResponse:
-    assert len(request.spans) == len(
-        request.boxes
-    ), "The length of spans and boxes must be equal."
-
     x_scale = 1000.0 / request.width
     y_scale = 1000.0 / request.height
 

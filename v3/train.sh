@@ -10,6 +10,7 @@ DATA_DIR="${DIR}/ReadingBank/"
 mkdir -p "${OUTPUT_DIR}"
 
 deepspeed train.py \
+  --model_dir 'microsoft/layoutlmv3-large' \
   --dataset_dir "${DATA_DIR}" \
   --dataloader_num_workers 1 \
   --deepspeed ds_config.json \
