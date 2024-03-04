@@ -68,7 +68,7 @@ I only train the `layout only` model. And test on the span-level dataset. So the
 |----------------------------|------|----------|-----------|
 | Heuristic Method           | no   | 44.4     | 70.7      |
 | LayoutReader (layout only) | no   | 94.9     | 97.5      |
-| LayoutReader (layout only) | yes  | 95.0     | 97.6      |
+| LayoutReader (layout only) | yes  | 94.8     | 97.4      |
 
 ## Word-Level Results
 

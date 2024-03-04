@@ -22,10 +22,9 @@ chen_cherry = SmoothingFunction()
 
 @app.command()
 def main(
-    input_file: str,
-    model_path: str,
-    batch_size: int = 64,
-    skip_input_ids: bool = False,
+    input_file: str = typer.Argument(..., help="input file"),
+    model_path: str = typer.Argument(..., help="model path"),
+    batch_size: int = typer.Option(16, help="batch size"),
 ):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = (
@@ -34,7 +33,7 @@ def main(
         .to(device)
         .eval()
     )
-    data_collator = DataCollator(skip_input_ids, model.config.hidden_size)
+    data_collator = DataCollator()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
