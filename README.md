@@ -4,7 +4,10 @@
         🤗 <a href="https://huggingface.co/hantian/layoutreader">Hugging Face</a>
 </p>
 
-TODO: a result example
+<p align="center">
+  <img src="./example/page_0.png" width="400"  alt="page_0"/>
+  <img src="./example/page_1.png" width="400"  alt="page_1"/> 
+</p>
 
 ## Why this repo?
 
@@ -29,7 +32,8 @@ from v3.helpers import prepare_inputs, boxes2inputs, parse_logits
 
 model = LayoutLMv3ForTokenClassification.from_pretrained("hantian/layoutreader")
 
-boxes = [[...], ...]  # list of [left, top, right, bottom], bboxes of spans
+# list of [left, top, right, bottom], bboxes of spans, should be range from 0 to 1000
+boxes = [[...], ...]  
 inputs = boxes2inputs(boxes)
 inputs = prepare_inputs(inputs, model)
 logits = model(**inputs).logits.cpu().squeeze(0)
