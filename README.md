@@ -63,7 +63,7 @@ python tools.py ./test/ test_shuf.jsonl.gz --src-shuffle-rate=1
 
 ## Train & Eval
 
-The core codes are in `./v3` folder. The `train.sh` and `eval.py` are the entry points.
+The core codes are in `./v3` folder. The `train.sh` and `eval.py` are the entrypoints.
 
 ```bash
 bash train.sh
