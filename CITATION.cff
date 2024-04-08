@@ -1,0 +1,7 @@
+@software{hantian_layoutreader_Software_2024,
+  author = {Hantian Pang},
+  title = {Faster LayoutReader based on LayoutLMv3},
+  url = {https://github.com/ppaanngggg/layoutreader},
+  version = {1.0.0},
+  date = {2024-02-28},
+}

@@ -127,3 +127,17 @@ The `layout only` model is trained by myself using the original codes, and the `
 |                            | r=100% | r=50%  | r=0%   | r=100% | r=50% | r=0%   |
 | LayoutReader (layout only) | 0.9718 | 0.9714 | 0.1331 | 2.72   | 2.82  | 105.40 |
 | LayoutReader               | 0.9772 | 0.9770 | 0.1783 | 2.48   | 2.46  | 72.94  |
+
+## Citation
+
+If this model helps you, please cite it.
+
+```bibtex
+@software{hantian_layoutreader_Software_2024,
+  author = {Hantian Pang},
+  title = {Faster LayoutReader based on LayoutLMv3},
+  url = {https://github.com/ppaanngggg/layoutreader},
+  version = {1.0.0},
+  date = {2024-02-28},
+}
+```
