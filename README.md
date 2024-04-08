@@ -133,11 +133,12 @@ The `layout only` model is trained by myself using the original codes, and the `
 If this model helps you, please cite it.
 
 ```bibtex
-@software{hantian_layoutreader_Software_2024,
-  author = {Hantian Pang},
-  title = {Faster LayoutReader based on LayoutLMv3},
+@software{Pang_Faster_LayoutReader_based_2024,
+  author = {Pang, Hantian},
+  month = feb,
+  title = {{Faster LayoutReader based on LayoutLMv3}},
   url = {https://github.com/ppaanngggg/layoutreader},
   version = {1.0.0},
-  date = {2024-02-28},
+  year = {2024}
 }
 ```
