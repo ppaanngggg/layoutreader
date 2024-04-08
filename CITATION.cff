@@ -1,7 +1,9 @@
-@software{hantian_layoutreader_Software_2024,
-  author = {Hantian Pang},
-  title = {Faster LayoutReader based on LayoutLMv3},
-  url = {https://github.com/ppaanngggg/layoutreader},
-  version = {1.0.0},
-  date = {2024-02-28},
-}
+cff-version: 1.2.0
+message: "If this model helps you, please cite it."
+authors:
+- family-names: "Pang"
+  given-names: "Hantian"
+title: "Faster LayoutReader based on LayoutLMv3"
+version: 1.0.0
+date-released: 2024-02-28
+url: "https://github.com/ppaanngggg/layoutreader"
