@@ -1,12 +1,15 @@
 # LayoutReader
 
 <p align="center">
-        🤗 <a href="https://huggingface.co/hantian/layoutreader">Hugging Face</a>
+  <a href="https://huggingface.co/hantian/layoutreader">
+    <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" width="20"/>
+    Hugging Face Model
+  </a>
 </p>
 
 <p align="center">
   <img src="./example/page_0.png" width="400"  alt="page_0"/>
-  <img src="./example/page_1.png" width="400"  alt="page_1"/> 
+  <img src="./example/page_1.png" width="400"  alt="page_1"/>
 </p>
 
 ## Why this repo?
@@ -33,7 +36,7 @@ from v3.helpers import prepare_inputs, boxes2inputs, parse_logits
 model = LayoutLMv3ForTokenClassification.from_pretrained("hantian/layoutreader")
 
 # list of [left, top, right, bottom], bboxes of spans, should be range from 0 to 1000
-boxes = [[...], ...]  
+boxes = [[...], ...]
 inputs = boxes2inputs(boxes)
 inputs = prepare_inputs(inputs, model)
 logits = model(**inputs).logits.cpu().squeeze(0)
@@ -49,7 +52,7 @@ Or you can `python main.py` to serve the model.
 
 ### Download Original Dataset
 
-The original dataset can download from [ReadingBank](https://layoutlm.blob.core.windows.net/readingbank/dataset/ReadingBank.zip?sv=2022-11-02&ss=b&srt=o&sp=r&se=2033-06-08T16:48:15Z&st=2023-06-08T08:48:15Z&spr=https&sig=a9VXrihTzbWyVfaIDlIT1Z0FoR1073VB0RLQUMuudD4%3D). More details can be found in the original [repo](https://aka.ms/readingbank). 
+The original dataset can download from [ReadingBank](https://huggingface.co/datasets/hantian/ReadingBank). More details can be found in the original [repo](https://aka.ms/readingbank).
 
 ### Build Span-Level Dataset
 
