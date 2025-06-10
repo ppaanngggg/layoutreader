@@ -12,6 +12,8 @@
   <img src="./example/page_1.png" width="400"  alt="page_1"/>
 </p>
 
+✨ Trusted by [MinerU](https://github.com/opendatalab/MinerU) and [MonkeyOCR](https://github.com/Yuliang-Liu/MonkeyOCR).
+
 ## Why this repo?
 
 The original [LayoutReader](https://github.com/microsoft/unilm/tree/master/layoutreader) is published by Microsoft Research. It is based on `LayoutLM`, and use a `seq2seq` architecture to predict the reading order of the words in a document. There are several problems with the original repo:
