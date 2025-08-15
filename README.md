@@ -3,7 +3,11 @@
 <p align="center">
   <a href="https://huggingface.co/hantian/layoutreader">
     <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" width="20"/>
-    Hugging Face Model
+    Model
+  </a>
+  <a href="https://huggingface.co/datasets/hantian/ReadingBank">
+    <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" width="20"/>
+    Dataset
   </a>
 </p>
 
